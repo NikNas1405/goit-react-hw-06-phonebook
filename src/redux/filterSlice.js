@@ -1,21 +1,31 @@
 import { initialState } from './initialState';
+import { createSlice } from '@reduxjs/toolkit';
+import storage from 'redux-persist/lib/storage';
+import { persistReducer } from 'redux-persist';
 
-//actions
-export const setFilters = value => {
-  return { type: 'filters/setFilters', payload: value };
-};
-
-//redusers
-export const filterReducer = (state = initialState.filters, action) => {
-  switch (action.type) {
-    case 'filters/setFilters':
-      // return {
-      //   ...state,
-      //   filters: action.payload,
-      // };
-
+const filtersSlice = createSlice({
+  // Ім'я слайсу
+  name: 'filters',
+  // Початковий стан редюсера слайсу
+  initialState: initialState.filters,
+  reducers: {
+    setFilters(state, action) {
+      // return action.payload;
       return (state = `${action.payload}`);
-    default:
-      return state;
-  }
+    },
+  },
+});
+
+export const persistConfig = {
+  key: 'filters',
+  storage,
 };
+
+// Генератори екшенів
+export const { setFilters } = filtersSlice.actions;
+// Редюсер слайсу
+// export const filterReducer = filtersSlice.reducer;
+export const filterReducer = persistReducer(
+  persistConfig,
+  filtersSlice.reducer
+);

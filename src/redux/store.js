@@ -1,23 +1,27 @@
-import { createStore, combineReducers } from 'redux';
-import { devToolsEnhancer } from '@redux-devtools/extension';
-import { persistStore, persistReducer } from 'redux-persist';
-import storage from 'redux-persist/lib/storage';
-
+import { configureStore } from '@reduxjs/toolkit';
+import {
+  persistStore,
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
+} from 'redux-persist';
 import { contactsReducer } from './contactsSlice';
 import { filterReducer } from './filterSlice';
 
-const persistConfig = {
-  key: 'root',
-  storage,
-};
-
-export const rootReduser = combineReducers({
-  contacts: contactsReducer,
-  filters: filterReducer,
+export const store = configureStore({
+  reducer: {
+    contacts: contactsReducer,
+    filters: filterReducer,
+  },
+  middleware: getDefaultMiddleware =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    }),
 });
 
-const persistedReducer = persistReducer(persistConfig, rootReduser);
-const enhancer = devToolsEnhancer();
-
-export const store = createStore(persistedReducer, enhancer);
 export const persistor = persistStore(store);

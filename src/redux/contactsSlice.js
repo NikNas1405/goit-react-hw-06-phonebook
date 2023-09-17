@@ -1,23 +1,16 @@
 import { toast } from 'react-toastify';
+import { createSlice } from '@reduxjs/toolkit';
 import { initialState } from './initialState';
+import storage from 'redux-persist/lib/storage';
+import { persistReducer } from 'redux-persist';
 
-//actions
-
-export const addContact = newContact => {
-  return {
-    type: 'contacts/addContact',
-    payload: newContact,
-  };
-};
-
-export const deleteContact = id => {
-  return { type: 'contacts/deleteContact', payload: id };
-};
-
-//redusers
-export const contactsReducer = (state = initialState.contacts, action) => {
-  switch (action.type) {
-    case 'contacts/addContact':
+const contactsSlice = createSlice({
+  // Ім'я слайсу
+  name: 'contacts',
+  // Початковий стан редюсера слайсу
+  initialState: initialState.contacts,
+  reducers: {
+    addContact(state, action) {
       const checkName = state.find(
         contact => contact.name === action.payload.name
       );
@@ -35,11 +28,23 @@ export const contactsReducer = (state = initialState.contacts, action) => {
         return state;
       }
       return [...state, action.payload];
-
-    case 'contacts/deleteContact':
+    },
+    deleteContact(state, action) {
       return [...state.filter(contact => contact.id !== action.payload)];
+    },
+  },
+});
 
-    default:
-      return state;
-  }
+export const persistConfig = {
+  key: 'contacts-list',
+  storage,
 };
+
+// Генератори екшенів
+export const { addContact, deleteContact } = contactsSlice.actions;
+// Редюсер слайсу
+// export const contactsReducer = contactsSlice.reducer;
+export const contactsReducer = persistReducer(
+  persistConfig,
+  contactsSlice.reducer
+);
