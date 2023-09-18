@@ -2,7 +2,7 @@ import { TextFilter, InputFilter, ContactFilterDiv } from './Filter.styled';
 // import { useDispatch, useSelector } from 'react-redux';
 // import { getFilter } from 'redux/selectors';
 import { useDispatch } from 'react-redux';
-import { setFilters } from '../../redux/filterSlice';
+import { setFilters } from '../../redux/filtersSlice';
 
 export const Filter = () => {
   const dispatch = useDispatch();

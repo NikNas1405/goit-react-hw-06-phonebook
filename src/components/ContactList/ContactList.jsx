@@ -1,32 +1,28 @@
-// import { useDispatch, useSelector } from 'react-redux';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { deleteContact } from '../../redux/contactsSlice';
 
-// import { deleteContact } from '../../redux/contactsSlice';
-
-// import { getContacts, getFilter } from 'redux/selectors';
-import { getContacts } from 'redux/selectors';
+import { getContacts, getFilter } from 'redux/selectors';
 
 import {
   ContactListStyled,
-//   ContactListItem,
-//   ContactListItemText,
-//   ContactListItemButton,
+  ContactListItem,
+  ContactListItemText,
+  ContactListItemButton,
 } from './ContactList.styled.js';
 
 export const ContactList = () => {
   const contacts = useSelector(getContacts);
-  // const filters = useSelector(getFilter);
+  const filters = useSelector(getFilter);
 
-  console.log(contacts);
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
-  // const visibleContacts = contacts.filter(contact =>
-  //   contact.name.toLowerCase().trim().includes(filters.toLowerCase())
-  // );
-
+  const visibleContacts = contacts.filter(contact =>
+    contact.name.toLowerCase().trim().includes(filters.toLowerCase())
+  );
+  
   return (
     <ContactListStyled>
-{/*       {visibleContacts.map(({ id, name, number }) => (
+      {visibleContacts.map(({ id, name, number }) => (
         <ContactListItem key={id}>
           <ContactListItemText>
             {name}: {number}
@@ -35,7 +31,7 @@ export const ContactList = () => {
             Delete
           </ContactListItemButton>
         </ContactListItem>
-      ))} */}
+      ))}
     </ContactListStyled>
   );
 };
